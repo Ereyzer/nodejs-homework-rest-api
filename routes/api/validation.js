@@ -31,7 +31,7 @@ const schemaUpdateContact = Joi.object({
 }).min(1);
 
 const schemaId = Joi.object({
-  contactId: Joi.objectId().required().required(),
+  contactId: Joi.objectId().required(),
 });
 
 const validate = async (schema, obj, res, next) => {

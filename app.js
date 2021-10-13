@@ -15,19 +15,18 @@ app.use(express.json());
 app.use("/api/contacts", contactsRouter);
 
 app.use((_req, res, next) => {
+  console.log(33333);
   res.status(404).json({ status: "error", code: 404, message: "Not found" });
   next();
 });
 
 app.use((err, _req, res, _next) => {
   console.error(err.message);
-  res
-    .status(500)
-    .json({
-      status: "error",
-      code: 500,
-      message: "Sorry we have some problems",
-    });
+  res.status(500).json({
+    status: "error",
+    code: 500,
+    message: "Sorry we have some problems",
+  });
 });
 
 module.exports = app;
