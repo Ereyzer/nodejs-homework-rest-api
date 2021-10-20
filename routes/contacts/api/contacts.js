@@ -1,14 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { contactControllers } = require("../../controllers");
+const { contactControllers } = require("../../../controllers");
 const {
   validateContact,
   validateUpdateContact,
   validateId,
   validateIsFavorite,
-} = require("./validation");
+} = require("../../validation");
+const { guard } = require("../../../helpers/guard");
 
-router.get("/", contactControllers.getContacts);
+router.get("/", guard, contactControllers.getContacts);
 
 router.get("/:contactId", validateId, contactControllers.getContact);
 

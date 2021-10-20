@@ -1,3 +1,3 @@
-const contactsDB = require("./contacts");
+const databaseApi = require("./databaseApi");
 
-module.exports = { contactsDB };
+module.exports = { databaseApi };

@@ -1,8 +1,8 @@
-const { contactsDB } = require("../repository");
+const { databaseApi } = require("../repository");
 
 const getContacts = async (_req, res, next) => {
   try {
-    const response = await contactsDB.listContacts();
+    const response = await databaseApi.listContacts();
 
     if (!response) return next();
 
@@ -17,7 +17,7 @@ const getContacts = async (_req, res, next) => {
 const getContact = async (req, res, next) => {
   const id = req.params.contactId;
   try {
-    const response = await contactsDB.getContactById(id);
+    const response = await databaseApi.getContactById(id);
     if (!response) return next();
     console.log(response);
     return res.status(200).json({
@@ -34,7 +34,7 @@ const getContact = async (req, res, next) => {
 
 const saveContact = async ({ body }, res, next) => {
   try {
-    const response = await contactsDB.addContact(body);
+    const response = await databaseApi.addContact(body);
     if (!response) return next();
     res.json({ message: "add new contact", response });
   } catch (err) {
@@ -45,7 +45,7 @@ const saveContact = async ({ body }, res, next) => {
 const removeContact = async (req, res, next) => {
   const id = req.params.contactId;
   try {
-    const response = await contactsDB.removeContact(id);
+    const response = await databaseApi.removeContact(id);
     if (!response) return next();
 
     return res.status(200).json({
@@ -64,7 +64,7 @@ const updateContact = async (req, res, next) => {
   const body = req.body;
 
   try {
-    const response = await contactsDB.updateContact(id, body);
+    const response = await databaseApi.updateContact(id, body);
 
     if (!response) return next();
 
@@ -85,7 +85,7 @@ const updateIsFavorite = async (req, res, next) => {
   const body = req.body;
 
   try {
-    const response = await contactsDB.updateContact(id, body);
+    const response = await databaseApi.updateContact(id, body);
     if (!response) return next();
 
     return res.status(200).json({
