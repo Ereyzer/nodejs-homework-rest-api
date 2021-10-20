@@ -2,8 +2,19 @@ const { use } = require("passport");
 const { databaseApi } = require("../repository");
 
 const getContacts = async ({ user, query }, res, next) => {
+  console.log(query);
+  const { limit = 5, offset = 0, favorite = null } = query;
+  const searchOptions = { owner: user._id };
+
+  if (favorite !== null) {
+    searchOptions.favorite = favorite;
+  }
+  console.log(searchOptions);
   try {
-    const response = await databaseApi.listContacts(user._id, query);
+    const response = await databaseApi.listContacts(searchOptions, {
+      limit,
+      offset,
+    });
 
     if (!response) return next();
 

@@ -3,13 +3,8 @@ const UserModel = require("../model/user");
 
 class DatabaseApi {
   // listContacts = () => ContactModel.find({});
-  listContacts = (userId, query) => {
-    const { limit = 5, offset = 0 } = query;
-    console.log(userId);
-    const searchOptions = { owner: userId };
-    return ContactModel.paginate(searchOptions, { limit, offset });
-  };
-
+  listContacts = (searchOptions, query) =>
+    ContactModel.paginate(searchOptions, query);
   getContactById = (contactId) => ContactModel.findById(contactId);
 
   removeContact = (contactId) => ContactModel.findByIdAndRemove(contactId);
