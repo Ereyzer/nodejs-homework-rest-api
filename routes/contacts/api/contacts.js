@@ -11,14 +11,20 @@ const { guard } = require("../../../helpers/guard");
 
 router.get("/", guard, contactControllers.getContacts);
 
-router.get("/:contactId", validateId, contactControllers.getContact);
+router.get("/:contactId", guard, validateId, contactControllers.getContact);
 
-router.post("/", validateContact, contactControllers.saveContact);
+router.post("/", guard, validateContact, contactControllers.saveContact);
 
-router.delete("/:contactId", validateId, contactControllers.removeContact);
+router.delete(
+  "/:contactId",
+  guard,
+  validateId,
+  contactControllers.removeContact
+);
 
 router.put(
   "/:contactId",
+  guard,
   validateId,
   validateUpdateContact,
   contactControllers.updateContact
@@ -26,6 +32,7 @@ router.put(
 
 router.patch(
   "/:contactId/favorite",
+  guard,
   validateId,
   validateIsFavorite,
   contactControllers.updateIsFavorite

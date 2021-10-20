@@ -2,7 +2,13 @@ const ContactModel = require("../model/contacts");
 const UserModel = require("../model/user");
 
 class DatabaseApi {
-  listContacts = () => ContactModel.find({});
+  // listContacts = () => ContactModel.find({});
+  listContacts = (userId, query) => {
+    const { limit = 5, offset = 0 } = query;
+    console.log(userId);
+    const searchOptions = { owner: userId };
+    return ContactModel.paginate(searchOptions, { limit, offset });
+  };
 
   getContactById = (contactId) => ContactModel.findById(contactId);
 

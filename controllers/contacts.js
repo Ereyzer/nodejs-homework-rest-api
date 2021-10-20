@@ -1,8 +1,9 @@
+const { use } = require("passport");
 const { databaseApi } = require("../repository");
 
-const getContacts = async (_req, res, next) => {
+const getContacts = async ({ user, query }, res, next) => {
   try {
-    const response = await databaseApi.listContacts();
+    const response = await databaseApi.listContacts(user._id, query);
 
     if (!response) return next();
 
@@ -14,12 +15,11 @@ const getContacts = async (_req, res, next) => {
   }
 };
 
-const getContact = async (req, res, next) => {
-  const id = req.params.contactId;
+const getContact = async ({ params }, res, next) => {
+  const id = params.contactId;
   try {
     const response = await databaseApi.getContactById(id);
     if (!response) return next();
-    console.log(response);
     return res.status(200).json({
       status: "OK",
       code: 200,
@@ -32,9 +32,9 @@ const getContact = async (req, res, next) => {
   }
 };
 
-const saveContact = async ({ body }, res, next) => {
+const saveContact = async ({ body, user }, res, next) => {
   try {
-    const response = await databaseApi.addContact(body);
+    const response = await databaseApi.addContact({ ...body, owner: user._id });
     if (!response) return next();
     res.json({ message: "add new contact", response });
   } catch (err) {
@@ -42,8 +42,9 @@ const saveContact = async ({ body }, res, next) => {
   }
 };
 
-const removeContact = async (req, res, next) => {
-  const id = req.params.contactId;
+const removeContact = async ({ params }, res, next) => {
+  const id = params.contactId;
+
   try {
     const response = await databaseApi.removeContact(id);
     if (!response) return next();
@@ -59,9 +60,8 @@ const removeContact = async (req, res, next) => {
   }
 };
 
-const updateContact = async (req, res, next) => {
-  const id = req.params.contactId;
-  const body = req.body;
+const updateContact = async ({ body, params }, res, next) => {
+  const id = params.contactId;
 
   try {
     const response = await databaseApi.updateContact(id, body);
@@ -80,9 +80,8 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-const updateIsFavorite = async (req, res, next) => {
-  const id = req.params.contactId;
-  const body = req.body;
+const updateIsFavorite = async ({ body, params }, res, next) => {
+  const id = params.contactId;
 
   try {
     const response = await databaseApi.updateContact(id, body);
