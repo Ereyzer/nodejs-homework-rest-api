@@ -26,6 +26,8 @@ class DatabaseApi {
   findUserByEmail = (email) => UserModel.findOne({ email });
   updateToken = (id, token) =>
     UserModel.findByIdAndUpdate(id, { token }, { new: true });
+  changeSubscribe = (id, { subscription }) =>
+    UserModel.findByIdAndUpdate(id, { subscription }, { new: true });
 }
 
 module.exports = new DatabaseApi();

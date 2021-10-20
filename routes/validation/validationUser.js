@@ -10,6 +10,7 @@ const schemaUser = Joi.object({
     .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
     .required(),
   password: Joi.string().required(),
+  subscription: Joi.string().default("starter"),
 });
 
 const schemaCredentialsUser = Joi.object({
@@ -18,5 +19,8 @@ const schemaCredentialsUser = Joi.object({
     .required(),
   password: Joi.string().required(),
 });
+const schemaUpdateSub = Joi.object({
+  subscription: Joi.string().valid("starter", "pro", "business").required(),
+});
 
-module.exports = { schemaUser, schemaCredentialsUser };
+module.exports = { schemaUser, schemaCredentialsUser, schemaUpdateSub };

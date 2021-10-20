@@ -1,5 +1,6 @@
 const { use } = require("passport");
 const { databaseApi } = require("../repository");
+const { HttpCode } = require("../config/constants");
 
 const getContacts = async ({ user, query }, res, next) => {
   console.log(query);
@@ -19,8 +20,8 @@ const getContacts = async ({ user, query }, res, next) => {
     if (!response) return next();
 
     return res
-      .status(200)
-      .json({ status: 200, message: "it is contacts list", response });
+      .status(HttpCode.OK)
+      .json({ status: HttpCode.OK, message: "it is contacts list", response });
   } catch (err) {
     next(err);
   }
@@ -31,9 +32,9 @@ const getContact = async ({ params }, res, next) => {
   try {
     const response = await databaseApi.getContactById(id);
     if (!response) return next();
-    return res.status(200).json({
+    return res.status(HttpCode.OK).json({
       status: "OK",
-      code: 200,
+      code: HttpCode.OK,
       message: `the contact ${id}`,
       contactId: id,
       response,
@@ -47,7 +48,14 @@ const saveContact = async ({ body, user }, res, next) => {
   try {
     const response = await databaseApi.addContact({ ...body, owner: user._id });
     if (!response) return next();
-    res.json({ message: "add new contact", response });
+    res
+      .status(HttpCode.CREATED)
+      .json({
+        status: "success",
+        code: HttpCode.CREATED,
+        message: "add new contact",
+        response,
+      });
   } catch (err) {
     next(err);
   }
@@ -60,12 +68,7 @@ const removeContact = async ({ params }, res, next) => {
     const response = await databaseApi.removeContact(id);
     if (!response) return next();
 
-    return res.status(200).json({
-      status: "OK",
-      code: 200,
-      message: "contact deleted",
-      response: {},
-    });
+    return res.status(HttpCode.NO_CONTENT).json({});
   } catch (err) {
     next(err);
   }
@@ -79,9 +82,9 @@ const updateContact = async ({ body, params }, res, next) => {
 
     if (!response) return next();
 
-    return res.status(200).json({
+    return res.status(HttpCode.OK).json({
       status: "OK",
-      code: 200,
+      code: HttpCode.OK,
       message: `Update contact ${id}`,
       response,
     });
@@ -98,9 +101,9 @@ const updateIsFavorite = async ({ body, params }, res, next) => {
     const response = await databaseApi.updateContact(id, body);
     if (!response) return next();
 
-    return res.status(200).json({
+    return res.status(HttpCode.OK).json({
       status: "OK",
-      code: 200,
+      code: HttpCode.OK,
       message: `Update contact ${id}`,
       response,
     });

@@ -63,4 +63,13 @@ const userInfo = async ({ user }, res) => {
   });
 };
 
-module.exports = { registrationUser, login, logout, userInfo };
+const changeSubscribe = async ({ user, body }, res) => {
+  const response = await databaseApi.changeSubscribe(user._id, body);
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    response,
+  });
+};
+
+module.exports = { registrationUser, login, logout, userInfo, changeSubscribe };

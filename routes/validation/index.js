@@ -4,7 +4,11 @@ const {
   schemaUpdateContact,
   schemaId,
 } = require("./validationContacts");
-const { schemaUser, schemaCredentialsUser } = require("./validationUser");
+const {
+  schemaUser,
+  schemaCredentialsUser,
+  schemaUpdateSub,
+} = require("./validationUser");
 
 const validate = async (schema, obj, res, next) => {
   try {
@@ -37,3 +41,5 @@ module.exports.validateUser = async (req, res, next) =>
 
 module.exports.validateCredentials = async (req, res, next) =>
   await validate(schemaCredentialsUser, req.body, res, next);
+module.exports.validateSubscribe = async (req, res, next) =>
+  await validate(schemaUpdateSub, req.body, res, next);
