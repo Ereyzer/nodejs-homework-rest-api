@@ -34,29 +34,9 @@ const schemaId = Joi.object({
   contactId: Joi.objectId().required(),
 });
 
-const validate = async (schema, obj, res, next) => {
-  console.log(obj);
-  try {
-    await schema.validateAsync(obj);
-    next();
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      status: "error",
-      code: 400,
-      message: `Field ${err.message.replace(/"/g, "")}`,
-    });
-  }
+module.exports = {
+  schemaIsFavorite,
+  schemaContact,
+  schemaUpdateContact,
+  schemaId,
 };
-
-module.exports.validateContact = async (req, res, next) =>
-  await validate(schemaContact, req.body, res, next);
-
-module.exports.validateUpdateContact = async (req, res, next) =>
-  await validate(schemaUpdateContact, req.body, res, next);
-
-module.exports.validateId = async (req, res, next) =>
-  await validate(schemaId, req.params, res, next);
-
-module.exports.validateIsFavorite = async (req, res, next) =>
-  await validate(schemaIsFavorite, req.body, res, next);

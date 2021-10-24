@@ -1,28 +1,40 @@
-const { contactsDB } = require("../repository");
+const { use } = require("passport");
+const { databaseApi } = require("../repository");
+const { HttpCode } = require("../config/constants");
 
-const getContacts = async (_req, res, next) => {
+const getContacts = async ({ user, query }, res, next) => {
+  console.log(query);
+  const { limit = 5, offset = 0, favorite = null } = query;
+  const searchOptions = { owner: user._id };
+
+  if (favorite !== null) {
+    searchOptions.favorite = favorite;
+  }
+  console.log(searchOptions);
   try {
-    const response = await contactsDB.listContacts();
+    const response = await databaseApi.listContacts(searchOptions, {
+      limit,
+      offset,
+    });
 
     if (!response) return next();
 
     return res
-      .status(200)
-      .json({ status: 200, message: "it is contacts list", response });
+      .status(HttpCode.OK)
+      .json({ status: HttpCode.OK, message: "it is contacts list", response });
   } catch (err) {
     next(err);
   }
 };
 
-const getContact = async (req, res, next) => {
-  const id = req.params.contactId;
+const getContact = async ({ params }, res, next) => {
+  const id = params.contactId;
   try {
-    const response = await contactsDB.getContactById(id);
+    const response = await databaseApi.getContactById(id);
     if (!response) return next();
-    console.log(response);
-    return res.status(200).json({
+    return res.status(HttpCode.OK).json({
       status: "OK",
-      code: 200,
+      code: HttpCode.OK,
       message: `the contact ${id}`,
       contactId: id,
       response,
@@ -32,45 +44,47 @@ const getContact = async (req, res, next) => {
   }
 };
 
-const saveContact = async ({ body }, res, next) => {
+const saveContact = async ({ body, user }, res, next) => {
   try {
-    const response = await contactsDB.addContact(body);
+    const response = await databaseApi.addContact({ ...body, owner: user._id });
     if (!response) return next();
-    res.json({ message: "add new contact", response });
+    res
+      .status(HttpCode.CREATED)
+      .json({
+        status: "success",
+        code: HttpCode.CREATED,
+        message: "add new contact",
+        response,
+      });
   } catch (err) {
     next(err);
   }
 };
 
-const removeContact = async (req, res, next) => {
-  const id = req.params.contactId;
+const removeContact = async ({ params }, res, next) => {
+  const id = params.contactId;
+
   try {
-    const response = await contactsDB.removeContact(id);
+    const response = await databaseApi.removeContact(id);
     if (!response) return next();
 
-    return res.status(200).json({
-      status: "OK",
-      code: 200,
-      message: "contact deleted",
-      response: {},
-    });
+    return res.status(HttpCode.NO_CONTENT).json({});
   } catch (err) {
     next(err);
   }
 };
 
-const updateContact = async (req, res, next) => {
-  const id = req.params.contactId;
-  const body = req.body;
+const updateContact = async ({ body, params }, res, next) => {
+  const id = params.contactId;
 
   try {
-    const response = await contactsDB.updateContact(id, body);
+    const response = await databaseApi.updateContact(id, body);
 
     if (!response) return next();
 
-    return res.status(200).json({
+    return res.status(HttpCode.OK).json({
       status: "OK",
-      code: 200,
+      code: HttpCode.OK,
       message: `Update contact ${id}`,
       response,
     });
@@ -80,17 +94,16 @@ const updateContact = async (req, res, next) => {
   }
 };
 
-const updateIsFavorite = async (req, res, next) => {
-  const id = req.params.contactId;
-  const body = req.body;
+const updateIsFavorite = async ({ body, params }, res, next) => {
+  const id = params.contactId;
 
   try {
-    const response = await contactsDB.updateContact(id, body);
+    const response = await databaseApi.updateContact(id, body);
     if (!response) return next();
 
-    return res.status(200).json({
+    return res.status(HttpCode.OK).json({
       status: "OK",
-      code: 200,
+      code: HttpCode.OK,
       message: `Update contact ${id}`,
       response,
     });
