@@ -1,12 +1,13 @@
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const mkdirp = require("mkdirp");
 
+const { UploadFIleAvatar } = require("../services/upload-services");
 const { databaseApi } = require("../repository");
 const { HttpCode } = require("../config/constants");
 const { ErrorTypes, CustomError } = require("../helpers/errorHandler");
 
-require("dotenv").config();
-
-const SECRET_KEY = process.env.SECRET_KEY;
+const { SECRET_KEY, AVATAR_DIR } = require("../config/dotenv-info");
 
 const registrationUser = async ({ body }, res, next) => {
   const isUser = await databaseApi.findUserByEmail(body.email);
@@ -72,4 +73,25 @@ const changeSubscribe = async ({ user, body }, res) => {
   });
 };
 
-module.exports = { registrationUser, login, logout, userInfo, changeSubscribe };
+const uploadAvatar = async ({ user: { id }, file }, res) => {
+  const destination = path.join(`public/${AVATAR_DIR}`, id);
+
+  await mkdirp(destination);
+  const uploadFIleAvatar = new UploadFIleAvatar(destination);
+  const avatarPath = await uploadFIleAvatar.save(file, id);
+  const response = await databaseApi.updateAvatar(id, avatarPath);
+  return res.status(HttpCode.OK).json({
+    status: "success",
+    code: HttpCode.OK,
+    response: { avatarUrl: avatarPath },
+  });
+};
+
+module.exports = {
+  registrationUser,
+  login,
+  logout,
+  userInfo,
+  changeSubscribe,
+  uploadAvatar,
+};

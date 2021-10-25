@@ -1,5 +1,4 @@
 const ErrorTypes = require("./error-constants");
-const { HttpCode } = require("../../config/constants");
 
 const wrapperError = (fn) => async (req, res, next) => {
   try {
@@ -8,26 +7,33 @@ const wrapperError = (fn) => async (req, res, next) => {
   } catch (e) {
     switch (e.name) {
       case ErrorTypes.CUSTOM_ERROR:
-        res.status(HttpCode.BAD_REQUEST).json({
+        res.status(e.status).json({
           status: "error",
-          code: HttpCode.BAD_REQUEST,
+          code: e.status,
           message: error.message,
         });
         break;
 
       case ErrorTypes.EXIST_USER_ERROR:
-        res.status(HttpCode.CONFLICT).json({
+        res.status(e.status).json({
           Status: "error",
-          code: HttpCode.CONFLICT,
+          code: e.status,
           response: {
             message: e.message,
           },
         });
         break;
       case ErrorTypes.CREDENTIALS_ERROR:
-        res.status(HttpCode.UNAUTHORIZED).json({
+        res.status(e.status).json({
           status: "error",
-          code: HttpCode.UNAUTHORIZED,
+          code: e.status,
+          message: e.message,
+        });
+        break;
+      case ErrorTypes.WRONG_AVATAR:
+        res.status(e.status).json({
+          status: "fail",
+          code: e.status,
           message: e.message,
         });
         break;
