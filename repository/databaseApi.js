@@ -28,8 +28,6 @@ class DatabaseApi {
     UserModel.findByIdAndUpdate(id, { token }, { new: true });
   changeSubscribe = (id, { subscription }) =>
     UserModel.findByIdAndUpdate(id, { subscription }, { new: true });
-  updateAvatar = (id, avatarURL) =>
-    UserModel.findByIdAndUpdate(id, { avatarURL }, { new: true });
 }
 
 module.exports = new DatabaseApi();

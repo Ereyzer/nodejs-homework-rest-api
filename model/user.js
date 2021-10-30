@@ -1,8 +1,9 @@
 const { Schema, model } = require("mongoose");
+require("dotenv").config();
 const bcrypt = require("bcryptjs");
-const gravatar = require("gravatar");
 
-const { SALT_FACTOR } = require("../config/dotenv-info");
+const SECRET_KEY = process.env.SECRET_KEY;
+const SALT_FACTOR = +process.env.SALT_FACTOR;
 
 const userSchema = new Schema(
   {
@@ -27,12 +28,6 @@ const userSchema = new Schema(
     token: {
       type: String,
       default: null,
-    },
-    avatarURL: {
-      type: String,
-      default: function () {
-        return gravatar.url(this.email, { s: "250" }, true);
-      },
     },
   },
   {

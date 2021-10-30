@@ -1,19 +1,11 @@
 const db = require("../config/db");
 const app = require("../app");
-const mkdirp = require("mkdirp");
 
-const {
-  UPLOAD_DIR,
-  AVATAR_DIR,
-  PORT = 3030,
-  HOST = "127.0.0.1",
-} = require("../config/dotenv-info");
+const PORT = process.env.PORT || 3030;
 
 db.then(() => {
-  app.listen(PORT, HOST, async () => {
-    await mkdirp(UPLOAD_DIR);
-    await mkdirp(`public/${AVATAR_DIR}`);
-    console.log(`Server running. Use our API on http://127.0.0.1:${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Server running. Use our API on port:${PORT}`);
   });
 }).catch((e) => {
   console.log(`Server not run ${e.message}`);

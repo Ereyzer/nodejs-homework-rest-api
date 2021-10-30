@@ -4,16 +4,15 @@ const cors = require("cors");
 
 const contactsRouter = require("./routes/contacts/api/contacts");
 const usersRouter = require("./routes/users/api/users");
+const { wrapperError } = require("./helpers/errorHandler");
 const helmet = require("helmet");
 
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
-app.use(express.static("public"));
 app.use(helmet());
 app.use(logger(formatsLogger));
 app.use(cors());
-
 app.use(express.json());
 
 app.use("/api/users", usersRouter);
@@ -24,13 +23,12 @@ app.use((_req, res, next) => {
   next();
 });
 
-app.use((err, req, res, _next) => {
-  const status = err.status || 500;
+app.use((err, _req, res, _next) => {
   console.error(err.message);
-  res.status(status).json({
-    status: err.status ? "fail" : "error",
-    code: status,
-    message: err.status ? err.message : "Sorry we have some problems",
+  res.status(500).json({
+    status: "error",
+    code: 500,
+    message: "Sorry we have some problems",
   });
 });
 

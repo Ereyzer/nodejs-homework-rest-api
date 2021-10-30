@@ -1,7 +1,5 @@
 const express = require("express");
-const fs = require("fs/promises");
 const router = express.Router();
-const { upload } = require("../../../helpers/uploads-service");
 const { userControllers } = require("../../../controllers");
 const {
   validateUser,
@@ -11,7 +9,6 @@ const {
 } = require("../../validation");
 const { wrapperError } = require("../../../helpers/errorHandler");
 const { guard } = require("../../../helpers/guard");
-const { UPLOAD_DIR } = require("../../../config/dotenv-info");
 
 router.post(
   "/signup",
@@ -26,12 +23,6 @@ router.patch(
   validateSubscribe,
   guard,
   wrapperError(userControllers.changeSubscribe)
-);
-router.patch(
-  "/avatar",
-  upload.single("avatar"),
-  guard,
-  wrapperError(userControllers.uploadAvatar)
 );
 
 module.exports = router;
