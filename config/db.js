@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const { URI_DB, URI_DB_TEST, NODE_ENV } = require("./dotenv-info");
 let uri;
