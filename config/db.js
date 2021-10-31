@@ -1,8 +1,15 @@
 const mongoose = require("mongoose");
 
-const { URI_DB } = require("./dotenv-info");
+const { URI_DB, URI_DB_TEST, NODE_ENV } = require("./dotenv-info");
+let uri;
 
-const db = mongoose.connect(URI_DB, {
+if (NODE_ENV === "test") {
+  uri = URI_DB_TEST;
+} else {
+  uri = URI_DB;
+}
+
+const db = mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

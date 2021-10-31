@@ -11,14 +11,15 @@ const { SECRET_KEY, AVATAR_DIR } = require("../config/dotenv-info");
 
 const registrationUser = async ({ body }, res, next) => {
   const isUser = await databaseApi.findUserByEmail(body.email);
+
   if (isUser)
     throw new CustomError(
       HttpCode.CONFLICT,
       "Email is already exist",
       ErrorTypes.EXIST_USER_ERROR
     );
-
   const response = await databaseApi.registration(body);
+
   return res
     .status(HttpCode.CREATED)
     .json({ status: "success", code: HttpCode.CREATED, response });
