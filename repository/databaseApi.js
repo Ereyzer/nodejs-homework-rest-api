@@ -26,6 +26,17 @@ class DatabaseApi {
   findUserByEmail = (email) => UserModel.findOne({ email });
   updateToken = (id, token) =>
     UserModel.findByIdAndUpdate(id, { token }, { new: true });
+
+  updateTokenVerify = (verifyToken) =>
+    UserModel.findOneAndUpdate(
+      { verifyToken },
+      { isVerified: true, verifyToken: null },
+      { new: true }
+    );
+
+  refreshVerifyToken = (id, verifyToken) =>
+    UserModel.findByIdAndUpdate(id, { verifyToken }, { new: true });
+
   changeSubscribe = (id, { subscription }) =>
     UserModel.findByIdAndUpdate(id, { subscription }, { new: true });
   updateAvatar = (id, avatarURL) =>

@@ -7,7 +7,7 @@ const schemaUser = Joi.object({
     .default("noname"),
 
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
     .required(),
   password: Joi.string().required(),
   subscription: Joi.string().default("starter"),
@@ -15,7 +15,7 @@ const schemaUser = Joi.object({
 
 const schemaCredentialsUser = Joi.object({
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
     .required(),
   password: Joi.string().required(),
 });
@@ -23,4 +23,15 @@ const schemaUpdateSub = Joi.object({
   subscription: Joi.string().valid("starter", "pro", "business").required(),
 });
 
-module.exports = { schemaUser, schemaCredentialsUser, schemaUpdateSub };
+const schemaResendVerify = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
+    .required(),
+});
+
+module.exports = {
+  schemaUser,
+  schemaCredentialsUser,
+  schemaUpdateSub,
+  schemaResendVerify,
+};

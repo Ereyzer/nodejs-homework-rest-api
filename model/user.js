@@ -2,6 +2,8 @@ const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
 const gravatar = require("gravatar");
 
+const crypto = require("crypto");
+
 const { SALT_FACTOR } = require("../config/dotenv-info");
 
 const userSchema = new Schema(
@@ -34,6 +36,11 @@ const userSchema = new Schema(
         return gravatar.url(this.email, { s: "250" }, true);
       },
     },
+    isVerified: { type: Boolean, default: false },
+    verifyToken: {
+      type: String,
+      default: crypto.randomUUID(),
+    },
   },
   {
     timestamps: true,
@@ -52,9 +59,8 @@ const userSchema = new Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  console.log(SALT_FACTOR);
   if (this.isModified("password")) {
-    const salt = await bcrypt.genSalt(SALT_FACTOR);
+    const salt = await bcrypt.genSalt(Number(SALT_FACTOR));
     this.password = await bcrypt.hash(this.password, salt);
   }
   next();

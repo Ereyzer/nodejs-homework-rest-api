@@ -4,6 +4,7 @@ const ErrorTypes = {
   EXIST_USER_ERROR: "existUserError",
   CREDENTIALS_ERROR: "credentialsError",
   WRONG_AVATAR: "wrongAvatar",
+  WRONG_URL_VERIFY: "wrongVerifyUrl",
 };
 
 module.exports = ErrorTypes;

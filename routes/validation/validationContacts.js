@@ -13,7 +13,7 @@ const schemaContact = Joi.object({
     .max(ValidNameLength.MAX)
     .required(),
   email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net", "ua"] } })
     .required(),
   phone: Joi.string().pattern(new RegExp(patternPhone)).required(),
 });

@@ -3,7 +3,6 @@ const { databaseApi } = require("../repository");
 const { HttpCode } = require("../config/constants");
 
 const getContacts = async ({ user, query }, res, next) => {
-  console.log(query);
   const { limit = 5, offset = 0, favorite = null } = query;
   const searchOptions = { owner: user._id };
 
@@ -48,14 +47,12 @@ const saveContact = async ({ body, user }, res, next) => {
   try {
     const response = await databaseApi.addContact({ ...body, owner: user._id });
     if (!response) return next();
-    res
-      .status(HttpCode.CREATED)
-      .json({
-        status: "success",
-        code: HttpCode.CREATED,
-        message: "add new contact",
-        response,
-      });
+    res.status(HttpCode.CREATED).json({
+      status: "success",
+      code: HttpCode.CREATED,
+      message: "add new contact",
+      response,
+    });
   } catch (err) {
     next(err);
   }

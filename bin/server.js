@@ -13,7 +13,7 @@ db.then(() => {
   app.listen(PORT, HOST, async () => {
     await mkdirp(UPLOAD_DIR);
     await mkdirp(`public/${AVATAR_DIR}`);
-    console.log(`Server running. Use our API on http://127.0.0.1:${PORT}`);
+    console.log(`Server running. Use our API on http://${HOST}:${PORT}`);
   });
 }).catch((e) => {
   console.log(`Server not run ${e.message}`);

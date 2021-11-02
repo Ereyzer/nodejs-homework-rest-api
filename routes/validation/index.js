@@ -8,6 +8,7 @@ const {
   schemaUser,
   schemaCredentialsUser,
   schemaUpdateSub,
+  schemaResendVerify,
 } = require("./validationUser");
 
 const validate = async (schema, obj, res, next) => {
@@ -43,3 +44,5 @@ module.exports.validateCredentials = async (req, res, next) =>
   await validate(schemaCredentialsUser, req.body, res, next);
 module.exports.validateSubscribe = async (req, res, next) =>
   await validate(schemaUpdateSub, req.body, res, next);
+module.exports.validateEmailBeforeVerify = async (req, res, next) =>
+  await validate(schemaResendVerify, req.body, res, next);

@@ -8,6 +8,7 @@ const {
   validateCredentials,
   validateSubscribe,
   validateId,
+  validateEmailBeforeVerify,
 } = require("../../validation");
 const { wrapperError } = require("../../../helpers/errorHandler");
 const { guard } = require("../../../helpers/guard");
@@ -33,5 +34,12 @@ router.patch(
   guard,
   wrapperError(userControllers.uploadAvatar)
 );
+
+router.post(
+  "/verify",
+  validateEmailBeforeVerify,
+  wrapperError(userControllers.refreshVerifyToken)
+);
+router.get("/verify/:verifyToken", wrapperError(userControllers.verifyUser));
 
 module.exports = router;
